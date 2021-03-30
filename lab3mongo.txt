@@ -1,0 +1,83 @@
+use sliit
+3. Add the following document to the database sliit;
+db.sliit.insert({"name": "John",
+"dateOfBirth": "1990-01-01T00:00:00Z",
+"subjects": ["Application frameworks", "Computer architecture"]
+
+})
+{ acknowledged: true,
+  insertedIds: { '0': ObjectId("6062fffa3be88055d48b8d0c") } }
+
+
+4. Find the document by ‘name’.
+db.sliit.find({"name": "John"})
+{ _id: ObjectId("6062ff4b98cd362c803c99d3"),
+  name: 'John',
+  dateOfBirth: '1990-01-01T00:00:00Z',
+  subjects: [ 'Application frameworks', 'Computerarchitecture' ] }
+
+5. Find the document by ‘_id’.
+db.sliit.find({_id: ObjectId("6062fffa3be88055d48b8d0c")})
+{ _id: ObjectId("6062fffa3be88055d48b8d0c"),
+  name: 'John',
+  dateOfBirth: '1990-01-01T00:00:00Z',
+  subjects: [ 'Application frameworks', 'Computer architecture' ] }
+
+
+//6. Add ‘Distributed Computing’ to the subjects list
+
+db.sliit.updateOne(
+    {name: "John"},
+    {$set:{"subjects" : ["Computer Networks" , "Computer Architecture" , "Distributed Computing"]}}
+)
+
+
+7. Add the following 2 document to the same collection.
+
+db.sliit.insert({"name": "Smith",
+"dateOfBirth": "1990-01-15T00:00:00Z",
+"subjects": ["Application frameworks", "Computer architecture"],
+"isActive": true})
+{ acknowledged: true,
+  insertedIds: { '0': ObjectId("606303ca3be88055d48b8d0d") } }
+
+
+db.sliit.insert({"name": "Jane",
+"dateOfBirth": "1990-02-15T00:00:00Z",
+"subjects": ["Application frameworks", "Computer architecture"],
+"isActive": false})
+{ acknowledged: true,
+  insertedIds: { '0': ObjectId("606304003be88055d48b8d0e") } }
+
+
+7. Find the document with the name ‘Smith’ and isActive flag is true and add Distributed 
+computing to subjects.
+
+db.sliit.aggregate([{$match:{"name": "Smith","isActive": true}},{$set:{"subjects": ["Application frameworks", "Computer architecture", "Distributed Computing"]}}])
+[ { _id: ObjectId("606303ca3be88055d48b8d0d"),
+    name: 'Smith',
+    dateOfBirth: '1990-01-15T00:00:00Z',
+    subjects: 
+     [ 'Application frameworks',
+       'Computer architecture',
+       'Distributed Computing' ],
+    isActive: true } ]
+
+
+8. Update the first document ‘isActive’ to false.
+db.sliit.updateOne(
+    {name: "Smith"},
+    {$set:{"isActive ":false}}
+)
+{ acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0 }
+
+
+9. Remove the first document created
+db.sliit.deleteOne({name: "Smith"})
+{ acknowledged: true, deletedCount: 1 }
+
+
